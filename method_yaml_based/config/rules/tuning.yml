@@ -1,0 +1,36 @@
+#====================================================================================================
+# Argument reference (https://registry.terraform.io/providers/SumoLogic/sumologic/latest/docs/resources/cse_rule_tuning_expression) 
+#====================================================================================================
+# index_key      (Required) Primary key used internally, not sent to Sumo. Must be unique
+# name           (Required) The name of the rule tuning expression.
+# description    (Required) The description of the rule tuning expression.
+# expression     (Required) Expression to match.
+# enabled        (Required) Enabled flag.
+# exclude        (Required) Set to true to exclude records that match the expression. If set to false, only records that do match the expression will be included.
+# is_global      (Required) Set to true if this tuning expression should be applied to all rules.
+# rule_ids       (Required) List of rule IDs, for the tuning expression to be applied. (Empty if is_global set to true)
+#====================================================================================================
+
+#====================================================================================================
+# Example usage
+#==================================================================================================== 
+- index_key: ter-1
+  name: Global Rule
+  description: I am an example of a global rule
+  expression: "expression here"
+  enabled: True
+  exclude: True
+  is_global: True
+  rule_ids: []
+
+- index_key: ter-2
+  name: Non Global Rule
+  description: I am an example of a non-global rule
+  expression: "expression here"
+  enabled: True
+  exclude: True
+  is_global: False
+  rule_ids:
+    -RULE-00001
+    -RULE-00002
+    -RULE-00003

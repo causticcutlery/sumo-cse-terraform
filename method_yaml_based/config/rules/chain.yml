@@ -1,0 +1,46 @@
+#====================================================================================================
+# Argument reference (https://registry.terraform.io/providers/SumoLogic/sumologic/latest/docs/resources/cse_chain_rule) 
+#====================================================================================================
+# index_key               (Required) Primary key used internally, not sent to Sumo. Must be unique
+# enabled                 (Required) Whether the rule should generate Signals
+# name                    (Required) The name of the Rule and generated Signals
+# summary_expression      (Optional) The summary of the generated Signals
+# description             (Required) The description of the generated Signals
+# entity_selectors        (Required) The entities to generate Signals on
+#     entityType          (Required) The type of the entity to generate the Signal on.
+#     expression          (Required) The expression or field name to generate the Signal on.
+# expressions_and_limits  (Required) The list of expressions and associated limits to make up the conditions of the chain rule
+#     expression          (Required) The expression for which records to match on
+#     limit               (Required) How many times this expression must match for the Signal to fire
+# group_by_fields         (Optional) A list of fields to group records by
+# ordered                 (Optional; defaults to false) Whether the records matching the expressions must be in the same chronological order as the expressions are listed in the rule
+# severity                (Required) The severity of the generated Signals
+# window_size             (Required) How long of a window to aggregate records for. Current acceptable values are T05M, T10M, T30M, T60M, T24H, T12H, or T05D.
+# tags                    (Required) The tags of the generated Signals
+# is_prototype            (Optional) Whether the generated Signals should be prototype Signals
+#====================================================================================================
+
+#====================================================================================================
+# Example usage
+#==================================================================================================== 
+- index_key: chr-1
+  enabled: true
+  name: "Possible successful brute force"
+  summary_expression: "{{user_username}} has possibly been successfully brute forced"
+  description: "A series of login failures followed by a success, to suggest a successful brute force"
+  entity_selectors:
+    - entity_type: _username
+      expression: user_username
+  expressions_and_limits:
+    - expression: "success = false"
+      limit: 10
+    - expression: "success = true"
+      limit: 1
+  group_by_fields: []
+  ordered: true
+  severity: 5
+  window_size: "T30m"
+  tags: 
+    - _mitreAttackTechnique:T1078
+    - _mitreAttackTactic:TA0001
+  is_prototype: false

@@ -1,0 +1,38 @@
+#====================================================================================================
+# Arguement reference (https://registry.terraform.io/providers/SumoLogic/sumologic/latest/docs/resources/cse_match_list) 
+#====================================================================================================
+# index_key      (Required) Primary key used internally, not sent to Sumo. Must be unique.
+# name           (Required) Match list name.
+# description    (Required) Match list description.
+# target_column  (Required) Target column. (possible values: Hostname, FileHash, Url, SrcIp, DstIp, Domain, Username, Ip, Asn, Isp, Org, SrcAsn, SrcIsp, SrcOrg, DstAsn, DstIsp, DstOrg or any custom column.)
+# default_ttl    (Optional) The default time to live for match list items added through the UI. Specified in seconds.
+# items          (Optional) List of match list items. See match_list_item schema for details.
+#   description  (Required) Match list item description.
+#   value        (Optional) Match list item value.
+#   expiration   (Optional) Match list item expiration (Format: YYYY-MM-DDTHH:mm:ss). Equal to "never" if not provided.
+#====================================================================================================
+
+#====================================================================================================
+# Example usage
+#==================================================================================================== 
+- index_key: mml-1
+  name: "Global Administrators"
+  description: "List of users with global administrator privilege"
+  target_column: Username
+  items: 
+    - value: johndoe
+      description: "Full Time Employee"
+    - value: bobsmith
+      description: Contractor
+      expiration: "2025-02-27T04:00:00" #End of contract date
+
+- index_key: mml-2
+  name: "Temporary IP Watch List"
+  description: "List of risky IPs"
+  target_column: Ip
+  default_ttl: 2592000 #30 days
+  items: 
+    - value: 10.1.2.3
+      description: "Suspicious scanning"
+    - value: 10.2.3.4
+      description: "Suspicious scanning"

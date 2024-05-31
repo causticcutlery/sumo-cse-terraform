@@ -1,0 +1,56 @@
+#====================================================================================================
+# Argument reference (https://registry.terraform.io/providers/SumoLogic/sumologic/latest/docs/resources/cse_outlier_rule) 
+#====================================================================================================
+# index_key                 (Required) Primary key used internally, not sent to Sumo. Must be unique
+# enabled                   (Required) Whether the rule should generate Signals
+# name                      (Required) The name of the Rule
+# name_expression           (Required) The name of the generated Signals
+# summary_expression        (Optional) The summary of the generated Signals
+# description_expression    (Required) The description of the generated Signals
+# match_expression          (Required) The expression for which records to match on
+# aggregation_function      (Required) One named aggregation functions
+#     name                  (Required) The name to use to reference the result
+#     function              (Required) The function to aggregate with
+#     arguments             (Required) One or more expressions to pass as arguments to the function
+# entity_selectors          (Required) The entities to generate Signals on
+#     entityType            (Required) The type of the entity to generate the Signal on
+#     expression            (Required) The expression or field name to generate the Signal on
+# floor_value               (Required) The minimum threshold to trigger signals
+# group_by_fields           (Optional) A list of fields to group records by
+# severity                  (Required) The severity of the generated Signals
+# window_size               (Required) The window size. Current acceptable values are T60M (1 hr) or T24H (1 day)
+# baseline_window_size      (Required) The baseline window size in milliseconds
+# retention_window_size     (Required) The retention window size in milliseconds
+# deviation_threshold       (Required) The deviation threshold used to calculate the threshold to trigger signals
+# tags                      (Optional) The tags of the generated Signals
+# is_prototype              (Optional) Whether the generated Signals should be prototype Signals
+#====================================================================================================
+
+#====================================================================================================
+# Example usage
+#==================================================================================================== 
+- index_key: olr-1
+  enabled: true
+  name: Spike in Login Failures from a User
+  name_expression: "Spike in Login Failures from a User"
+  summary_expression: "Excessive count of failure login events identified for user: {{user_username}} based on daily historic activity"
+  description_expression: "Exceeded a normal baseline of login failures could indicate an attempt to brute force the account"
+  match_expression: "objectType = 'Authentication' AND normalizedAction = 'logon' AND success = false"
+  aggregation_functions:
+    - name: "current" 
+      function: "count"
+      arguments: ["true"]
+  entity_selectors:
+    - entity_type: "_username"
+      expression: "user_username"
+  floor_value: 10
+  group_by_fields: ["user_username"]
+  severity: 4
+  window_size: "T24H" #24 hours
+  baseline_window_size: 604800000   #7 days
+  retention_window_size: 7776000000 #90 days
+  deviation_threshold: 2
+  tags: 
+    - _mitreAttackTactic:TA0006
+    - _mitreAttackTechnique:T1110
+  is_prototype: false

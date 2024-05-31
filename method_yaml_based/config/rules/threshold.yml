@@ -1,0 +1,43 @@
+#====================================================================================================
+# Argument reference (https://registry.terraform.io/providers/SumoLogic/sumologic/latest/docs/resources/cse_threshold_rule) 
+#====================================================================================================
+# index_key - (Required) Primary key used internally, not sent to Sumo. Must be unique
+# count_distinct - (Optional; defaults to false) Whether to count distinct values of a field, as opposed to just counting the number of records
+# count_field - (Optional) The field to count if count_distinct is set to true
+# description - (Required) The description of the generated Signals
+# enabled - (Required) Whether the rule should generate Signals
+# entity_selectors - (Required) The entities to generate Signals on
+#     entityType - (Required) The type of the entity to generate the Signal on.
+#     expression - (Required) The expression or field name to generate the Signal on.
+# expression - (Required) The expression for which records to match on
+# group_by_fields - (Optional) A list of fields to group records by
+# is_prototype - (Optional) Whether the generated Signals should be prototype Signals
+# limit - (Required) A Signal will be fired when this many records/distinct field values are matched
+# name - (Required) The name of the Rule and the generated Signals
+# severity - (Required) The severity of the generated Signals
+# summary_expression - (Optional) The summary of the generated Signals
+# tags - (Required) The tags of the generated Signals
+# window_size - (Required) How long of a window to aggregate records for. Current acceptable values are T05M, T10M, T30M, T60M, T24H, T12H, or T05D.
+#====================================================================================================
+
+#====================================================================================================
+# Example usage
+#==================================================================================================== 
+- index_key: thr-1
+  enabled: true
+  name: Excessive Sharepoint Downloads
+  summary_expression: "{{user_username}} has downloaded a large amount of files"
+  description: "An excessive amount of file downloads could indicate an attempt to exfiltrate data."
+  expression: "metadata_vendor = 'O365' and action = 'download'"
+  entity_selectors:
+    - entity_type: "_username"
+      expression: "user_username"
+  count_distinct: false
+  count_field: "filename"
+  group_by_fields: ["user_username"]
+  limit: 1000
+  severity: 5
+  window_size: "T30M" #30 minutes
+  tags: 
+    - _mitreAttackTechnique:T1567 
+  is_prototype: false

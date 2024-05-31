@@ -1,0 +1,69 @@
+#====================================================================================================
+# Argument reference (https://registry.terraform.io/providers/SumoLogic/sumologic/latest/docs/resources/cse_aggregation_rule) 
+#====================================================================================================
+# index_key               (Required) Primary key used internally, not sent to Sumo. Must be unique
+# enabled                 (Required) Whether the rule should generate Signals
+# name                    (Required) The name of the Rule
+# name_expression         (Required) The name of the generated Signals
+# summary_expression      (Optional) The summary of the generated Signals
+# description_expression  (Required) The description of the generated Signals
+# match_expression        (Required) The expression for which records to match on
+# aggregation_functions   (Required) One or more named aggregation functions
+#     name                (Required) The name to use to reference the result in the trigger_expression
+#     function            (Required) The function to aggregate with
+#     arguments           (Required) One or more expressions to pass as arguments to the function
+# trigger_expression      (Required) The expression to determine whether a Signal should be created based on the aggregation results
+# entity_selectors        (Required) The entities to generate Signals on
+#     entityType          (Required) The type of the entity to generate the Signal on.
+#     expression          (Required) The expression or field name to generate the Signal on.
+# group_by_entity         (Optional; defaults to true) Whether to group records by the specified entity fields
+# group_by_fields         (Optional) A list of fields to group records by
+# severity_mapping        (Required) The configuration of how the severity of the Signals should be mapped from the Records
+#     type                (Required) Whether to set a constant severity ("constant"), set the severity based on the direct value of a record field ("fieldValue"), or map a record field value to a severity ("fieldValueMapping").
+#     default             (Optional) The severity to use in the "constant" case or to fall back to if the field used by "fieldValue"/"fieldValueMapping" is not populated.
+#     field               (Optional) The field to use in the "fieldValue"/"fieldValueMapping" cases.
+#     mapping             (Optional) The map of record values to severities to use in the "fieldValueMapping" case
+#          type           (Required) Must be set to "eq" currently
+#          from           (Required) The record value to map from
+#          to             (Required) The severity value to map to
+# window_size             (Required) How long of a window to aggregate records for. Current acceptable values are T05M, T10M, T30M, T60M, T24H, T12H, or T05D
+# window_size_millis      (Optional) Used only when window_size is set to CUSTOM. Window size in milliseconds ranging from 1 minute to 5 days ("60000" to "432000000")#====================================================================================================
+# tags                    (Required) The tags of the generated Signals
+# is_prototype            (Optional) Whether the generated Signals should be prototype Signals
+#====================================================================================================
+
+#====================================================================================================
+# Example usage
+#==================================================================================================== 
+- index_key: agr-1
+  enabled: true
+  name: "Multiple IPs authenticating to a single account"
+  name_expression: "Multiple IPs authenticating to single account"
+  summary_expression: "{{account_name}} has been authenticated to from {{ip_count}} unique IP addresses"
+  description_expression: "Could suggest a possible compromise of this account, if the authenticated source IPs are not expected behavor from the user"
+  match_expression: "metadata_product = 'auth_logs'"
+  aggregation_functions:
+    - name: ip_count
+      function: count_distinct
+      arguments: ["src_ip"]
+  trigger_expression: "ip_count > 10"
+  entity_selectors:
+    - entity_type: "_account_name"
+      expression: "account_name"
+  group_by_entity: true
+  group_by_fields: ["account_name"]
+  severity_mapping:
+    - type: fieldValueMapping
+      default: 2
+        - type: greaterThan
+          from: 20
+          to: 5
+        - type: greaterThan
+          from: 40
+          to: 10
+  window_size: CUSTOM
+  window_size_millis: 2592000 #30 days
+  tags: 
+    - _mitreAttackTechnique:T1078
+    - _mitreAttackTactic:TA0001
+  is_prototype: false

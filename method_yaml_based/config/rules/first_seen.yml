@@ -1,0 +1,49 @@
+#====================================================================================================
+# Argument reference (https://registry.terraform.io/providers/SumoLogic/sumologic/latest/docs/resources/cse_first_seen_rule) 
+#====================================================================================================
+# index_key               (Required) Primary key used internally, not sent to Sumo. Must be unique
+# enabled                 (Required) Whether the rule should generate Signals
+# name                    (Required) The name of the Rule
+# name_expression         (Required) The name of the generated Signals
+# summary_expression      (Optional) The summary of the generated Signals
+# description_expression  (Required) The description of the generated Signals
+# baseline_type           (Required) The baseline type. Current acceptable values are GLOBAL or PER_ENTITY
+# filter_expression       (Required) The expression for which records to match on
+# group_by_fields         (Optional) A list of fields to group records by
+# entity_selectors        (Required) The entities to generate Signals on
+#     entityType          (Required) The type of the entity to generate the Signal on
+#     expression          (Required) The expression or field name to generate the Signal on
+# severity                (Required) The severity of the generated Signals
+# baseline_window_size    (Required) The baseline window size in milliseconds
+# retention_window_size   (Required) The retention window size in milliseconds
+# category                (Optional) The category
+# value_fields            (Required) The value fields formatted as a list
+# tags                    (Optional) The tags of the generated Signals
+# is_prototype            (Optional) Whether the generated Signals should be prototype Signals
+#====================================================================================================
+
+#====================================================================================================
+# Example usage
+#==================================================================================================== 
+- index_key: fsr-1
+  enabled: true
+  name: "First seen IP for user login"
+  name_expression: "First seen IP for user login"
+  summary_expression: "{{src_ip}} was seen for the first time logging into {{user_username}}"
+  description_expression: "{{src_ip}} was seen for the first time logging into {{user_username}} in a 30 day baseline"
+  baseline_type: PER_ENTITY
+  filter_expression: "metadata_product = 'auth_logs'"
+  group_by_fields: 
+  entity_selectors:
+    - entity_type: _username
+      expression: user_username
+    - entity_type: _ip
+      expression: src_ip
+  severity: 1
+  baseline_window_size: 2592000000 #30 days  
+  retention_window_size: 7776000000 #90 days
+  value_fields: ["src_ip"]
+  tags: 
+    - _mitreAttackTechnique:T1078
+    - _mitreAttackTactic:TA0001
+  is_prototype: false

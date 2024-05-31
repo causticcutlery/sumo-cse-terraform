@@ -1,0 +1,26 @@
+#====================================================================================================
+# Arguement reference (https://registry.terraform.io/providers/SumoLogic/sumologic/latest/docs/resources/cse_match_list) 
+#====================================================================================================
+# index_key      (Required) Primary key used internally, not sent to Sumo. Must be unique.
+# name           (Required) Match list name.
+# description    (Required) Match list description.
+# target_column  (Required) Target column. (possible values: Hostname, FileHash, Url, SrcIp, DstIp, Domain, Username, Ip, Asn, Isp, Org, SrcAsn, SrcIsp, SrcOrg, DstAsn, DstIsp, DstOrg or any custom column.)
+# default_ttl    (Optional) The default time to live for match list items added through the UI. Specified in seconds.
+# items          (Optional) List of match list items. See match_list_item schema for details.
+#   description  (Required) Match list item description.
+#   value        (Optional) Match list item value.
+#   expiration   (Optional) Match list item expiration (Format: YYYY-MM-DDTHH:mm:ss). Equal to "never" if not provided.
+#====================================================================================================
+
+#====================================================================================================
+# Example usage
+#==================================================================================================== 
+- index_key: uml-1
+  name: VIPs
+  description: "VIP users"
+  target_column: Username
+
+- index_key: uml-2
+  name: Executives
+  description: "Executive users"
+  target_column: Username

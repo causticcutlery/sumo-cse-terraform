@@ -1,0 +1,29 @@
+#====================================================================================================
+# Argument reference (https://registry.terraform.io/providers/SumoLogic/sumologic/latest/docs/resources/cse_tag_schema) 
+#====================================================================================================
+# index_key        (Required) Primary key used internally, not sent to Sumo. Must be unique
+# key              (Required) Tag Schema key.
+# label            (Required) Tag Schema label.
+# content_types    (Required) Applicable content types. Valid values: "customInsight", "entity", "rule", "threatIntelligence".
+# free_form        (Required) Whether the tag schema accepts free form custom values.
+# value_options    (At least one needs to be added)
+#     value        (Required) Value option value.
+#     label        (Required) Value option label.
+#     link         (Optional) Value option link.
+#====================================================================================================
+
+#====================================================================================================
+# Example usage
+#==================================================================================================== 
+- index_key: tag-1
+  key: user_type
+  label: User Type
+  content_types: ["entity"]
+  free_form: True
+  value_options:
+    - value: Normal User
+      label: Normal User
+    - value: Local Admin
+      label: Local Admin
+    - value: Global Admin
+      label: Global Admin
