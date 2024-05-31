@@ -23,7 +23,7 @@ resource "sumologic_cse_custom_insight" "custom_insights" {
     # A check to see if dynamic severity (an optional field) has a value present 
     for_each = try(each.value.dynamic_severity != null && length(each.value.dynamic_severity) > 0 ? [each.value.dynamic_severity] : [], [])
 
-    # These convoluted looking allow the YAML file to have these fields in an arbitrary order
+    # This convoluted looking code allows the YAML file to have these fields in an arbitrary order
     content {
       minimum_signal_severity    = try(dynamic_severity.value[0].minimum_signal_severity, dynamic_severity.value[1].minimum_signal_severity)
       insight_severity           = try(dynamic_severity.value[0].insight_severity, dynamic_severity.value[1].insight_severity)
