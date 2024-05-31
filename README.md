@@ -60,31 +60,11 @@ Before you begin, ensure you have the following:
     sumologic_environment   = var.sumologic_environment
     ```
 
-5. **Modify configurations:**
-
-    Modify the configurations to your liking. Either via YAML configuration files or by writing a new resource for each configuration.
-
-6. **Initialize Terraform:**
+5. **Initialize Terraform:**
 
     ```sh
     terraform init
     ```
-
-## Usage
-
-To create a plan for the configurations, run:
-
-```sh
-terraform plan
-```
-
-To apply the configurations, run:
-
-```sh
-terraform apply
-```
-
-You will be prompted to confirm the changes before they are applied.
 
 ## Examples
 
@@ -101,6 +81,24 @@ This is my preferred way to deploy Terraform. It involves writing the Terraform 
 https://github.com/causticcutlery/sumo-cse-terraform/tree/main/method_resource_based/
 
 Another way of deploying Terraform resources, but I think it is more difficult to maintain. There are no YAML configuration files, but instead you write a separate resource for each configuration you want to deploy.
+
+## Usage
+
+Start by modifying the configurations to your liking. Either via YAML configuration files or by writing a new resource for each configuration.
+
+To create a plan for the configurations, run:
+
+```sh
+terraform plan
+```
+
+To apply the configurations, run:
+
+```sh
+terraform apply
+```
+
+You will be prompted to confirm the changes before they are applied.
 
 ## Contributing
 
