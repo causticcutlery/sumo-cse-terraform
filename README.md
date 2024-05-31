@@ -28,7 +28,19 @@ Before you begin, ensure you have the following:
     cd sumologic-cse-terraform
     ```
 
-2. **Configure your Sumo Logic credentials using environment variables:**
+2. **Choose a deployment method:**
+
+    ```sh
+    cd method_resource_based
+    ```
+
+    OR
+
+    ```sh
+    cd method_yaml_based
+    ```
+
+3. **Configure your Sumo Logic credentials using environment variables:**
 
     Export your Sumo Logic API credentials as environment variables:
 
@@ -38,7 +50,7 @@ Before you begin, ensure you have the following:
     export SUMOLOGIC_ENVIRONMENT="us1"  # Change this to your Sumo Logic environment
     ```
 
-3. **Create a Terraform variables file:**
+4. **Create a Terraform variables file:**
 
     Create a file named `terraform.tfvars` and add the following content:
 
@@ -48,7 +60,11 @@ Before you begin, ensure you have the following:
     sumologic_environment   = var.sumologic_environment
     ```
 
-4. **Initialize Terraform:**
+5. **Modify configurations:**
+
+    Modify the configurations to your liking. Either via YAML configuration files or by writing a new resource for each configuration.
+
+6. **Initialize Terraform:**
 
     ```sh
     terraform init
