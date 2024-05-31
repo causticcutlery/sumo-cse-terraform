@@ -63,6 +63,13 @@ Before you begin, ensure you have the following:
 5. **Initialize Terraform:**
 
     ```sh
+    terraform run-all init
+    ```
+
+    OR
+
+    ```sh
+    cd deployments/[desired configuration]
     terraform init
     ```
 
