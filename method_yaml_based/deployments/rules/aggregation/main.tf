@@ -1,3 +1,29 @@
+# terraform {
+  
+#     required_providers {
+#         sumologic = {
+#             source = var.sumo_source
+#             version = var.sumo_source
+#         }
+#     }
+# }
+terraform {
+  source = "..."
+  // Other Terraform configurations
+  
+  # Get variables from common.hcl
+  extra_arguments "common" {
+    commands = get_local("common")
+  }
+}
+
+
+provider "sumologic" {
+    access_id   = "aaa"
+    access_key  = "aaaa"
+    environment = var.sumo_source
+}
+
 //====================================================================================================
 // Variable to store the YAML file in the configs folder
 // This config file contains all the configs that will be pushed to CSE
